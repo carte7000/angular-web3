@@ -1,6 +1,6 @@
 {
   "name": "@angular-web3/schematics",
-  "version": "0.0.1-0",
+  "version": "0.0.2-0",
   "description": "A set of angular-cli schematics related to ethereum development",
   "scripts": {
     "build": "tsc -p tsconfig.json",
@@ -11,6 +11,9 @@
     "angular",
     "web3"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "author": "Simon Boissonneault-Robert",
   "license": "MIT",
   "schematics": "./src/collection.json",
