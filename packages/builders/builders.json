@@ -1,0 +1,10 @@
+{
+    "$schema": "@angular-devkit/architect/src/builders-schema.json",
+    "builders": {
+        "contracts-builder": {
+            "class": "./contracts-lib/index",
+            "schema": "./contracts-lib/schema.json",
+            "description": "Build browser app extended with custom webpack config"
+        }
+    }
+}

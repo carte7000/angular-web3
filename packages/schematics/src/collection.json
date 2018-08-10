@@ -1,0 +1,10 @@
+{
+  "$schema": "../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    "contracts-lib": {
+      "schema": "./contracts-lib/schema.json",
+      "description": "A blank schematic.",
+      "factory": "./contracts-lib/index#contractsLib"
+    }
+  }
+}
