@@ -1,15 +1,17 @@
 {
   "name": "@angular-web3/schematics",
-  "version": "0.0.0",
-  "description": "A blank schematics",
+  "version": "0.0.1-0",
+  "description": "A set of angular-cli schematics related to ethereum development",
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test": "npm run build && jasmine src/**/*_spec.js"
   },
   "keywords": [
-    "schematics"
+    "schematics",
+    "angular",
+    "web3"
   ],
-  "author": "",
+  "author": "Simon Boissonneault-Robert",
   "license": "MIT",
   "schematics": "./src/collection.json",
   "dependencies": {
