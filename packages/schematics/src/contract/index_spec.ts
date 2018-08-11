@@ -50,19 +50,19 @@ describe('Contract Schematic', () => {
   it('should create an contract', () => {
     const tree = schematicRunner.runSchematic('contract', defaultOptions, appTree);
     const files = tree.files;
-    expect(files.indexOf('/projects/bar/src/app/foo.sol')).toBeGreaterThanOrEqual(0);
+    expect(files.indexOf('/projects/bar/contracts/foo.sol')).toBeGreaterThanOrEqual(0);
   });
   it('should create a contract', () => {
     const tree = schematicRunner.runSchematic('contract', defaultOptions, appTree);
-    const content = tree.readContent('/projects/bar/src/app/foo.sol');
+    const content = tree.readContent('/projects/bar/contracts/foo.sol');
     expect(content).toContain('pragma solidity ^0.4.0;');
     expect(content).toContain('contract Foo {');
   });
 
-  it('should respect the sourceRoot value', () => {
+  it('should respect the path value', () => {
     const config = JSON.parse(appTree.readContent('/angular.json'));
-    config.projects.bar.sourceRoot = 'projects/bar/custom';
     appTree.overwrite('/angular.json', JSON.stringify(config, null, 2));
+    defaultOptions.path = '/projects/bar/custom/app';
     appTree = schematicRunner.runSchematic('contract', defaultOptions, appTree);
     expect(appTree.files.indexOf('/projects/bar/custom/app/foo.sol')).toBeGreaterThanOrEqual(0);
   });

@@ -21,7 +21,6 @@ import {
 } from '@angular-devkit/schematics';
 import { getWorkspace } from '../utility/config';
 import { parseName } from '../utility/parse-name';
-import { buildDefaultPath } from '../utility/project';
 import { Schema as ContractOptions } from './schema';
 
 
@@ -34,7 +33,7 @@ export default function (options: ContractOptions): Rule {
     const project = workspace.projects[options.project];
 
     if (options.path === undefined) {
-      options.path = buildDefaultPath(project);
+      options.path = `/${project.root}/contracts/`;
     }
 
     const parsedPath = parseName(options.path, options.name);
