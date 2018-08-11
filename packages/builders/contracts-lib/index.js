@@ -9,6 +9,7 @@ const operators_1 = require("rxjs/operators");
 const solc = require("solc");
 const generateSource_1 = require("typechain/dist/generateSource");
 const copyRuntime_1 = require("typechain/dist/copyRuntime");
+const fs = require("fs");
 const truffleCompile = require("truffle-compile");
 const truffleResolver = require("truffle-resolver");
 const p = require("path");
@@ -42,30 +43,36 @@ class NgPackagrContractsBuilder extends build_ng_packagr_1.NgPackagrBuilder {
         const options = Object.assign({ solc, resolver: new truffleResolver(pathOption) }, pathOption);
         copyRuntime_1.copyRuntime(`${contracts_build_ts_dir}/${RUNTIME_FILE_NAME}.ts`);
         const obs = rxjs_1.Observable.create((observer) => {
-            truffleCompile.all(options, (err, result) => {
-                if (!err) {
-                    rxjs_1.forkJoin(Object.keys(result).map((contractName) => {
-                        const name = result[contractName].contract_name;
-                        const buildPath = `${contracts_build_dir}/${name}.json`;
-                        const buildPathTs = `${contracts_build_ts_dir}/${name}.ts`;
-                        const newSource = generateSource_1.generateSource(result[contractName].abi, {
-                            fileName: name,
-                            relativeRuntimePath: `./${RUNTIME_FILE_NAME}`
+            const hasContract = fs.existsSync(contracts_dir) && fs.readdirSync(contracts_dir).filter((x) => x.endsWith('.sol')).length > 0;
+            if (hasContract) {
+                truffleCompile.all(options, (err, result) => {
+                    if (!err) {
+                        rxjs_1.forkJoin(Object.keys(result).map((contractName) => {
+                            const name = result[contractName].contract_name;
+                            const buildPath = `${contracts_build_dir}/${name}.json`;
+                            const buildPathTs = `${contracts_build_ts_dir}/${name}.ts`;
+                            const newSource = generateSource_1.generateSource(result[contractName].abi, {
+                                fileName: name,
+                                relativeRuntimePath: `./${RUNTIME_FILE_NAME}`
+                            });
+                            return rxjs_1.forkJoin(this.write(buildPath, JSON.stringify(result)), this.write(buildPathTs, newSource));
+                        }))
+                            .pipe(operators_1.catchError((err) => {
+                            observer.error(err);
+                            return rxjs_1.Observable.create();
+                        }))
+                            .subscribe(() => {
+                            observer.next(void 0);
                         });
-                        return rxjs_1.forkJoin(this.write(buildPath, JSON.stringify(result)), this.write(buildPathTs, newSource));
-                    }))
-                        .pipe(operators_1.catchError((err) => {
+                    }
+                    else {
                         observer.error(err);
-                        return rxjs_1.Observable.create();
-                    }))
-                        .subscribe(() => {
-                        observer.next(void 0);
-                    });
-                }
-                else {
-                    observer.error(err);
-                }
-            });
+                    }
+                });
+            }
+            else {
+                observer.next(void 0);
+            }
         });
         return obs.pipe(operators_1.switchMap(() => super.run(builderConfig)));
     }

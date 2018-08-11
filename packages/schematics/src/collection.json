@@ -5,6 +5,11 @@
       "schema": "./contracts-lib/schema.json",
       "description": "A blank schematic.",
       "factory": "./contracts-lib/index#contractsLib"
+    },
+    "contract": {
+      "schema": "./contract/schema.json",
+      "description": "A blank schematic.",
+      "factory": "./contract/index"
     }
   }
 }

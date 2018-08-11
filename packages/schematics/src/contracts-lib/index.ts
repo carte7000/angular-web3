@@ -95,11 +95,6 @@ function addDependenciesToPackageJson() {
       },
       {
         type: NodeDependencyType.Dev,
-        name: 'angular-cli-builders',
-        version: '*'
-      },
-      {
-        type: NodeDependencyType.Dev,
         name: '@angular/compiler-cli',
         version: latestVersions.Angular,
       },
